@@ -1,11 +1,11 @@
 -- Supabase PostgreSQL Schema for TutorCRM (Production-Hardened)
--- Run this in Supabase -> SQL Editor
+-- Run this in Supabase -> SQL Editor if needed (FastAPI also auto-manages tables)
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Batches
 CREATE TABLE IF NOT EXISTS batches (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id VARCHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     subject VARCHAR(60) NOT NULL,
     grade VARCHAR(20) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS batches (
 
 -- Students
 CREATE TABLE IF NOT EXISTS students (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id VARCHAR(36) PRIMARY KEY,
     student_name VARCHAR(100) NOT NULL,
     parent_name VARCHAR(100) NOT NULL,
     primary_contact VARCHAR(15) NOT NULL,
@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS students (
 
 -- Student-Batch Junction
 CREATE TABLE IF NOT EXISTS student_batches (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
-    batch_id UUID NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
+    id VARCHAR(36) PRIMARY KEY,
+    student_id VARCHAR(36) NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    batch_id VARCHAR(36) NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
     assigned_at DATE NOT NULL DEFAULT CURRENT_DATE,
     custom_monthly_fee NUMERIC(10, 2) DEFAULT NULL,
     is_active BOOLEAN DEFAULT TRUE,
@@ -45,9 +45,9 @@ CREATE TABLE IF NOT EXISTS student_batches (
 
 -- Payments / Transaction Ledger
 CREATE TABLE IF NOT EXISTS fee_payments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    student_id UUID NOT NULL REFERENCES students(id) ON DELETE RESTRICT,
-    batch_id UUID REFERENCES batches(id) ON DELETE SET NULL,
+    id VARCHAR(36) PRIMARY KEY,
+    student_id VARCHAR(36) NOT NULL REFERENCES students(id) ON DELETE RESTRICT,
+    batch_id VARCHAR(36) REFERENCES batches(id) ON DELETE SET NULL,
     amount_paid NUMERIC(10, 2) NOT NULL CHECK (amount_paid > 0),
     payment_date DATE NOT NULL DEFAULT CURRENT_DATE,
     payment_mode VARCHAR(20) NOT NULL DEFAULT 'UPI', -- 'UPI', 'CASH', 'BANK_TRANSFER'
@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS fee_payments (
 
 -- Attendance
 CREATE TABLE IF NOT EXISTS attendance (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    batch_id UUID NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
-    student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    id VARCHAR(36) PRIMARY KEY,
+    batch_id VARCHAR(36) NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
+    student_id VARCHAR(36) NOT NULL REFERENCES students(id) ON DELETE CASCADE,
     attendance_date DATE NOT NULL DEFAULT CURRENT_DATE,
     status VARCHAR(10) NOT NULL DEFAULT 'PRESENT', -- 'PRESENT', 'ABSENT', 'LATE'
     notes VARCHAR(200),
@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS attendance (
 
 -- Academic Engine: Test Exams
 CREATE TABLE IF NOT EXISTS test_exams (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    batch_id UUID NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
+    id VARCHAR(36) PRIMARY KEY,
+    batch_id VARCHAR(36) NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
     title VARCHAR(150) NOT NULL,
     subject VARCHAR(60) NOT NULL,
     max_marks NUMERIC(6, 2) NOT NULL CHECK (max_marks > 0),
@@ -82,9 +82,9 @@ CREATE TABLE IF NOT EXISTS test_exams (
 
 -- Academic Engine: Test Scores
 CREATE TABLE IF NOT EXISTS test_scores (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    test_id UUID NOT NULL REFERENCES test_exams(id) ON DELETE CASCADE,
-    student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    id VARCHAR(36) PRIMARY KEY,
+    test_id VARCHAR(36) NOT NULL REFERENCES test_exams(id) ON DELETE CASCADE,
+    student_id VARCHAR(36) NOT NULL REFERENCES students(id) ON DELETE CASCADE,
     marks_obtained NUMERIC(6, 2) NOT NULL DEFAULT 0.0 CHECK (marks_obtained >= 0),
     is_absent BOOLEAN NOT NULL DEFAULT FALSE,
     remarks VARCHAR(255),

@@ -3,6 +3,7 @@ from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.pool import NullPool
 
 load_dotenv()
 
@@ -25,6 +26,10 @@ engine_kwargs = {"echo": False}
 if is_sqlite:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
 else:
+    connect_args = {
+        "statement_cache_size": 0,
+        "prepared_statement_name_func": lambda: "",
+    }
     # asyncpg does not accept ?sslmode= in the connection string URL; parse and handle cleanly
     if "sslmode=" in DATABASE_URL or "ssl=" in DATABASE_URL:
         parsed = urlparse(DATABASE_URL)
@@ -43,15 +48,11 @@ else:
             parsed.fragment
         ))
         if needs_ssl:
-            engine_kwargs["connect_args"] = {"ssl": "require"}
+            connect_args["ssl"] = "require"
 
-    # Production connection pool settings (PgBouncer and serverless friendly)
-    engine_kwargs.update({
-        "pool_size": 10,
-        "max_overflow": 5,
-        "pool_recycle": 300,
-        "pool_pre_ping": True,
-    })
+    engine_kwargs["connect_args"] = connect_args
+    # Use NullPool for cloud PostgreSQL (PgBouncer and serverless friendly)
+    engine_kwargs["poolclass"] = NullPool
 
 engine = create_async_engine(DATABASE_URL, **engine_kwargs)
 
