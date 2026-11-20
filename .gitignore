@@ -1,0 +1,44 @@
+# ========================================================
+# TutorCRM Git Ignore (Production-Ready)
+# ========================================================
+
+# Python & Backend
+backend/venv/
+backend/.venv/
+**/__pycache__/
+*.py[cod]
+*$py.class
+backend/tutor.db
+backend/tutor.db-journal
+backend/tutor.db-wal
+backend/tutor.db-shm
+
+# Node.js & Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+node_modules/
+.next/
+
+# Environment Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+frontend/.env.local
+
+# Logs & Temporary Files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS System Files
+.DS_Store
+Thumbs.db
+desktop.ini
