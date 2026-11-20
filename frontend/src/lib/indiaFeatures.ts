@@ -1,7 +1,7 @@
 // India-Specific Zero-Budget Features
 export const TEACHER_CONFIG = {
-  name: process.env.NEXT_PUBLIC_TEACHER_NAME || "Sharma Tutorials",
-  upiId: process.env.NEXT_PUBLIC_TEACHER_UPI_ID || "sharma.maths@okaxis",
+  name: process.env.NEXT_PUBLIC_TEACHER_NAME || "Nandi Tutorials",
+  upiId: process.env.NEXT_PUBLIC_TEACHER_UPI_ID || "sarbeswarnandi-2@okaxis",
 };
 
 /**
@@ -34,8 +34,8 @@ export function generateWhatsAppFeeReminderLink(params: {
   const { phone, parentName, studentName, batchNames, pendingDue } = params;
   const cleanPhone = phone.replace(/\D/g, "").slice(-10);
 
-  const message = 
-`Namaste ${parentName} Ji,
+  const message =
+    `Namaste ${parentName} Ji,
 
 This is a gentle reminder from *${TEACHER_CONFIG.name}*.
 Tuition fee for *${studentName}* (${batchNames}) is pending.
@@ -69,8 +69,8 @@ export function generateWhatsAppReceiptLink(params: {
   const cleanPhone = phone.replace(/\D/g, "").slice(-10);
   const dateStr = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 
-  const message = 
-`🧾 *FEE PAYMENT RECEIPT* - ${TEACHER_CONFIG.name}
+  const message =
+    `🧾 *FEE PAYMENT RECEIPT* - ${TEACHER_CONFIG.name}
 ━━━━━━━━━━━━━━━━━━
 *Receipt No:* #${receiptId || Math.floor(100000 + Math.random() * 900000)}
 *Date:* ${dateStr}
@@ -103,8 +103,8 @@ export function generateWhatsAppAbsentAlert(params: {
   const cleanPhone = phone.replace(/\D/g, "").slice(-10);
   const todayStr = dateStr || new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 
-  const message = 
-`⚠️ *ATTENDANCE ALERT* - ${TEACHER_CONFIG.name}
+  const message =
+    `⚠️ *ATTENDANCE ALERT* - ${TEACHER_CONFIG.name}
 ━━━━━━━━━━━━━━━━━━
 Namaste ${parentName} Ji,
 
@@ -172,7 +172,7 @@ export function generateWhatsAppScorecardLink(params: {
   const remarksLine = remarks ? `\n💬 *Coach Notes:* "${remarks}"` : "";
 
   const message =
-`📊 *ACADEMIC TEST REPORT* - ${TEACHER_CONFIG.name}
+    `📊 *ACADEMIC TEST REPORT* - ${TEACHER_CONFIG.name}
 ━━━━━━━━━━━━━━━━━━
 Namaste ${parentName} Ji,
 
@@ -215,7 +215,7 @@ export function generateBatchAnnouncementLink(params: {
   const header = typeHeaders[announcementType] || "📢 *BATCH NOTICE*";
 
   const message =
-`${header} - ${TEACHER_CONFIG.name}
+    `${header} - ${TEACHER_CONFIG.name}
 ━━━━━━━━━━━━━━━━━━
 Namaste ${parentName} Ji,
 
