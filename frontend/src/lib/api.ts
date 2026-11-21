@@ -74,11 +74,8 @@ export interface Stats {
   today_attendance_summary?: Record<string, number>;
 }
 
-const BACKEND_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
-// In browser, prefer explicit NEXT_PUBLIC_API_URL if set, otherwise use relative /api/v1 (proxied by Next.js rewrites)
-export const BASE_URL = typeof window !== "undefined"
-  ? (process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "")}/api/v1` : "/api/v1")
-  : `${BACKEND_URL}/api/v1`;
+const RAW_BACKEND = (process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+export const BASE_URL = RAW_BACKEND ? `${RAW_BACKEND}/api/v1` : "/api/v1";
 
 function getAuthHeaders(): Record<string, string> {
   if (typeof window === "undefined") return {};

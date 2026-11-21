@@ -51,8 +51,8 @@ const INITIAL_STUDENT_FORM = {
   student_name: "",
   parent_name: "",
   primary_contact: "",
-  grade: "10th",
-  school_or_board: "CBSE",
+  grade: "",
+  school_or_board: "",
   batch_ids: [] as string[],
 };
 
@@ -150,8 +150,8 @@ export default function StudentManagementView({
       student_name: student.student_name,
       parent_name: student.parent_name,
       primary_contact: student.primary_contact,
-      grade: student.grade,
-      school_or_board: student.school_or_board,
+      grade: student.grade || "",
+      school_or_board: student.school_or_board || "",
       batch_ids: student.batches.map((b) => b.id),
     });
     setShowConfirmDeleteStudent(false);
@@ -432,16 +432,20 @@ export default function StudentManagementView({
                           <span className="truncate">{student.student_name}</span>
                           <ExternalLink size={12} className="opacity-0 group-hover:opacity-100 text-indigo-500 shrink-0 transition-opacity" />
                         </Link>
-                        <span className="text-[11px] px-1.5 py-0.2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded font-medium shrink-0">
-                          {student.grade}
-                        </span>
+                        {student.grade && (
+                          <span className="text-[11px] px-1.5 py-0.2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded font-medium shrink-0">
+                            {student.grade}
+                          </span>
+                        )}
                       </div>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
                         Parent: <span className="text-gray-700 dark:text-gray-300 font-medium">{student.parent_name}</span> • 📞 {student.primary_contact}
                       </p>
-                      <p className="text-[11px] text-gray-400 truncate">
-                        {student.school_or_board}
-                      </p>
+                      {student.school_or_board && (
+                        <p className="text-[11px] text-gray-400 truncate">
+                          {student.school_or_board}
+                        </p>
+                      )}
                     </div>
 
                     <button
@@ -635,27 +639,25 @@ export default function StudentManagementView({
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                    Grade / Class *
+                    Grade / Class
                   </label>
                   <input
                     type="text"
-                    required
                     value={studentForm.grade}
                     onChange={(e) => setStudentForm({ ...studentForm, grade: e.target.value })}
-                    placeholder="e.g. 10th"
+                    placeholder="e.g. 10th (Optional)"
                     className="w-full p-2.5 border border-gray-200 dark:border-gray-700 rounded-xl text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                    Board / School *
+                    Board / School
                   </label>
                   <input
                     type="text"
-                    required
                     value={studentForm.school_or_board}
                     onChange={(e) => setStudentForm({ ...studentForm, school_or_board: e.target.value })}
-                    placeholder="e.g. CBSE / DPS"
+                    placeholder="e.g. CBSE / ICSE (Optional)"
                     className="w-full p-2.5 border border-gray-200 dark:border-gray-700 rounded-xl text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   />
                 </div>

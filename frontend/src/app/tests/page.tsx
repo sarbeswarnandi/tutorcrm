@@ -34,6 +34,7 @@ import {
   deleteTest,
 } from "@/lib/api";
 import { generateWhatsAppScorecardLink } from "@/lib/indiaFeatures";
+import { getTodayDateString } from "@/lib/timezone";
 
 export default function TestsPage() {
   const [batches, setBatches] = useState<Batch[]>([]);
@@ -57,9 +58,7 @@ export default function TestsPage() {
   const [newSubject, setNewSubject] = useState<string>("");
   const [newBatchId, setNewBatchId] = useState<string>("");
   const [newMaxMarks, setNewMaxMarks] = useState<string>("50");
-  const [newExamDate, setNewExamDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
-  );
+  const [newExamDate, setNewExamDate] = useState<string>(getTodayDateString());
   const [creating, setCreating] = useState<boolean>(false);
   const [createError, setCreateError] = useState<string | null>(null);
 

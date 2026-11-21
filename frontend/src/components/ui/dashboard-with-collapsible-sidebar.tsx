@@ -47,8 +47,8 @@ export const CollapsibleSidebar = ({
   ];
 
   const defaultBottomItems: SidebarItem[] = [
-    { id: "Settings", title: "Settings", icon: Settings },
-    { id: "Help & Support", title: "Help & Support", icon: HelpCircle },
+    { id: "/settings", title: "Settings", icon: Settings },
+    { id: "/help", title: "Help & Support", icon: HelpCircle },
   ];
 
   const navItems = items || defaultItems;
@@ -72,6 +72,7 @@ export const CollapsibleSidebar = ({
           {navItems.map((item) => (
             <Option
               key={item.id}
+              id={item.id}
               Icon={item.icon}
               title={item.title}
               selected={selected}
@@ -90,6 +91,7 @@ export const CollapsibleSidebar = ({
             {navBottomItems.map((item) => (
               <Option
                 key={item.id}
+                id={item.id}
                 Icon={item.icon}
                 title={item.title}
                 selected={selected}
@@ -108,6 +110,7 @@ export const CollapsibleSidebar = ({
 };
 
 interface OptionProps {
+  id?: string;
   Icon: LucideIcon;
   title: string;
   selected: string;
@@ -116,8 +119,8 @@ interface OptionProps {
   notifs?: number;
 }
 
-export const Option = ({ Icon, title, selected, setSelected, open, notifs }: OptionProps) => {
-  const isSelected = selected === title;
+export const Option = ({ id, Icon, title, selected, setSelected, open, notifs }: OptionProps) => {
+  const isSelected = selected === id || selected === title;
 
   return (
     <button

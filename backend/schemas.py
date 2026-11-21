@@ -67,8 +67,8 @@ class StudentBase(BaseModel):
     student_name: str
     parent_name: str
     primary_contact: str = Field(..., description="10-digit mobile number")
-    grade: str
-    school_or_board: str
+    grade: Optional[str] = ""
+    school_or_board: Optional[str] = ""
     date_of_joining: date = Field(default_factory=date.today)
     is_active: bool = True
     notes: Optional[str] = None

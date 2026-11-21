@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Student, fetchStudents, recordFeePayment } from "@/lib/api";
 import { TEACHER_CONFIG, generateUpiUri, generateWhatsAppReceiptLink } from "@/lib/indiaFeatures";
+import { getCurrentMonthString } from "@/lib/timezone";
 
 interface CollectFeeModalProps {
   isOpen: boolean;
@@ -67,7 +68,7 @@ export default function CollectFeeModal({
   } | null>(null);
 
   // Default current month string e.g. "Nov 2026"
-  const defaultCurrentMonth = `${new Date().toLocaleString("en-US", { month: "short" })} ${new Date().getFullYear()}`;
+  const defaultCurrentMonth = getCurrentMonthString();
 
   // When student changes, calculate unpaid months sorted chronologically (earliest first)
   const unpaidMonths = (selectedStudent?.monthly_breakdown || []).filter(

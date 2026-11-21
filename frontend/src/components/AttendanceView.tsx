@@ -23,6 +23,7 @@ import {
   fetchMonthlyAttendanceSummary,
 } from "@/lib/api";
 import { generateWhatsAppAbsentAlert } from "@/lib/indiaFeatures";
+import { getTodayDateString } from "@/lib/timezone";
 
 interface AttendanceViewProps {
   batches: Batch[];
@@ -31,18 +32,14 @@ interface AttendanceViewProps {
 export default function AttendanceView({ batches }: AttendanceViewProps) {
   const [activeTab, setActiveTab] = useState<"daily" | "monthly">("daily");
   const [selectedBatchId, setSelectedBatchId] = useState<string>(batches[0]?.id || "");
-  const [attendanceDate, setAttendanceDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
-  );
+  const [attendanceDate, setAttendanceDate] = useState<string>(getTodayDateString());
   const [attendanceData, setAttendanceData] = useState<AttendanceBatchData | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Monthly summary state
-  const [selectedMonth, setSelectedMonth] = useState<string>(
-    new Date().toISOString().slice(0, 7)
-  );
+  const [selectedMonth, setSelectedMonth] = useState<string>(getTodayDateString().slice(0, 7));
   const [monthlyData, setMonthlyData] = useState<MonthlyAttendanceSummary | null>(null);
   const [loadingMonthly, setLoadingMonthly] = useState(false);
 

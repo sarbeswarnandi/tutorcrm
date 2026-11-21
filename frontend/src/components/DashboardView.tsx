@@ -33,6 +33,7 @@ import {
 import { generateWhatsAppReceiptLink } from "@/lib/indiaFeatures";
 import CollectFeeModal from "@/components/CollectFeeModal";
 import DefaultersQueueModal from "@/components/DefaultersQueueModal";
+import { formatTime, formatDate, getTodayDateString } from "@/lib/timezone";
 
 interface DashboardViewProps {
   stats: Stats;
@@ -56,16 +57,8 @@ export default function DashboardView({
   const [queueStudents, setQueueStudents] = useState<Student[]>([]);
   const [loadingQueue, setLoadingQueue] = useState(false);
 
-  // Date filtering for Fee Transaction Ledger
-  const getTodayDateStr = () => {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    const d = String(now.getDate()).padStart(2, "0");
-    return `${y}-${m}-${d}`;
-  };
-
-  const todayStr = getTodayDateStr();
+  // Date filtering for Fee Transaction Ledger (Always aligned with configured Indian/active timezone)
+  const todayStr = getTodayDateString();
   const [selectedDate, setSelectedDate] = useState<string>(todayStr);
   const [ledgerTransactions, setLedgerTransactions] = useState<Transaction[]>([]);
   const [loadingLedger, setLoadingLedger] = useState(false);
@@ -121,26 +114,11 @@ export default function DashboardView({
   };
 
   const formatTxTime = (createdAtStr?: string) => {
-    if (!createdAtStr) return "--:--";
-    try {
-      const d = new Date(createdAtStr);
-      return isNaN(d.getTime())
-        ? "--:--"
-        : d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true });
-    } catch {
-      return "--:--";
-    }
+    return formatTime(createdAtStr);
   };
 
   const formatTxDate = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr);
-      return isNaN(d.getTime())
-        ? dateStr
-        : d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
-    } catch {
-      return dateStr;
-    }
+    return formatDate(dateStr);
   };
 
   return (

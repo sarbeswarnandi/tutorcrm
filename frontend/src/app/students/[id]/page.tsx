@@ -36,6 +36,7 @@ import {
   generateWhatsAppAbsentLink,
 } from "@/lib/indiaFeatures";
 import CollectFeeModal from "@/components/CollectFeeModal";
+import { formatTime, formatDate } from "@/lib/timezone";
 
 export default function StudentProfile360Page() {
   const params = useParams();
@@ -94,15 +95,7 @@ export default function StudentProfile360Page() {
   };
 
   const formatTxTime = (createdAtStr?: string) => {
-    if (!createdAtStr) return "--:--";
-    try {
-      const d = new Date(createdAtStr);
-      return isNaN(d.getTime())
-        ? "--:--"
-        : d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true });
-    } catch {
-      return "--:--";
-    }
+    return formatTime(createdAtStr);
   };
 
   if (loading) {
@@ -181,12 +174,16 @@ export default function StudentProfile360Page() {
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight truncate">
                   {student.student_name}
                 </h1>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                  {student.grade}
-                </span>
-                <span className="text-xs text-slate-500 font-medium truncate">
-                  {student.school_or_board}
-                </span>
+                {student.grade && (
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                    {student.grade}
+                  </span>
+                )}
+                {student.school_or_board && (
+                  <span className="text-xs text-slate-500 font-medium truncate">
+                    {student.school_or_board}
+                  </span>
+                )}
               </div>
 
               <div className="flex items-center gap-2 sm:gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1.5 flex-wrap">
@@ -483,7 +480,7 @@ export default function StudentProfile360Page() {
                             #{p.id.slice(0, 8).toUpperCase()}
                           </td>
                           <td className="py-2.5 px-3.5 text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                            {p.payment_date}
+                            {formatDate(p.payment_date)}
                           </td>
                           <td className="py-2.5 px-3.5 text-slate-500 whitespace-nowrap">
                             {formatTxTime(p.created_at)}

@@ -1,7 +1,19 @@
 // India-Specific Zero-Budget Features
 export const TEACHER_CONFIG = {
-  name: process.env.NEXT_PUBLIC_TEACHER_NAME || "Nandi Tutorials",
-  upiId: process.env.NEXT_PUBLIC_TEACHER_UPI_ID || "sarbeswarnandi-2@okaxis",
+  get name(): string {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("tutor_crm_teacher_name");
+      if (saved && saved.trim()) return saved.trim();
+    }
+    return process.env.NEXT_PUBLIC_TEACHER_NAME || "Nandi Tutorials";
+  },
+  get upiId(): string {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("tutor_crm_teacher_upi");
+      if (saved && saved.trim()) return saved.trim();
+    }
+    return process.env.NEXT_PUBLIC_TEACHER_UPI_ID || "sarbeswarnandi-2@okaxis";
+  },
 };
 
 /**

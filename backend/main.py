@@ -341,8 +341,8 @@ async def create_student(
         student_name=payload.student_name,
         parent_name=payload.parent_name,
         primary_contact=payload.primary_contact,
-        grade=payload.grade,
-        school_or_board=payload.school_or_board,
+        grade=payload.grade or "",
+        school_or_board=payload.school_or_board or "",
         date_of_joining=payload.date_of_joining,
         is_active=payload.is_active
     )
